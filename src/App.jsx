@@ -5,12 +5,13 @@ import MainPage from './pages/MainPage';
 function App() {
 
   return (
-        <BrowserRouter>
-          <Routes>
-              <Route path="/workout" element={<MainPage />} />
-              <Route path="/workout/:date" element={<MainPage />} />
-          </Routes>
-        </BrowserRouter>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/workout" element={<MainPage />} />
+        <Route path="/workout/:date" element={<MainPage />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
