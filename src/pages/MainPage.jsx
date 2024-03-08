@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
-import { arraySeries, formatDate } from '../utils/utils.js'
+import { arraySeries, arrayTypes, formatDate } from '../utils/utils.js'
 
 export default function MainPage() {
 
@@ -23,9 +23,11 @@ export default function MainPage() {
 
     const localValue = localStorage.getItem(actualDate + "blocklist")
     const localState = localStorage.getItem(actualDate + "modificable")
+    const localType = localStorage.getItem(actualDate + "tipo")
 
     const [workout, setWorkout] = useState({
         date: actualDate,
+        type: localType ? JSON.parse(localType) : null,
         blockList: localValue ? JSON.parse(localValue) : [],
         modificable: localState ? JSON.parse(localState) : true,
     })
@@ -45,33 +47,61 @@ export default function MainPage() {
         // getWorkout(workout.date)
         const localValue = localStorage.getItem(actualDate + "blocklist")
         const localState = localStorage.getItem(actualDate + "modificable")
+        const localType = localStorage.getItem(actualDate + "tipo")
 
         setWorkout(prevWorkout => ({
             ...prevWorkout,
+            type: localType ? JSON.parse(localType) : null,
             blockList: localValue ? JSON.parse(localValue) : [],
             modificable: localState ? JSON.parse(localState) : true,
         }))
     }, [workout.date])
 
     useEffect(() => { // Guarda la rutina cuando se modifica
-        localStorage.setItem(workout.date + "blocklist", JSON.stringify(workout.blockList))
+        // if (!workout.blockList.length)
+        //     localStorage.setItem(workout.date + "blocklist", JSON.stringify(workout.blockList))
+        // else {
+        //     localStorage.removeItem(workout.date + "blocklist")
+        //     localStorage.removeItem(workout.date + "modificable")
+        // }
+        localStorage.setItem(actualDate + "blocklist", JSON.stringify(workout.blockList))
     }, [workout.blockList])
 
     useEffect(() => { // Guarda el booleano modificable cuando se modifica
-        localStorage.setItem(workout.date + "modificable", JSON.stringify(workout.modificable))
+        localStorage.setItem(actualDate + "modificable", JSON.stringify(workout.modificable))
     }, [workout.modificable])
 
+    useEffect(() => { // Guarda el booleano modificable cuando se modifica
+        localStorage.setItem(actualDate + "tipo", JSON.stringify(workout.type))
+    }, [workout.type])
+
     // Funciones de la rutina
+    const createWorkout = (option) => {
+        setWorkout(prevWorkout => ({
+            ...prevWorkout,
+            type: option.value
+        }));
+    }
+
     const addBlock = (option) => {
         const newBlock = {
             series: option.value,
             exerciseList: [],
         }
-
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             blockList: [...prevWorkout.blockList, newBlock]
         }));
+    }
+
+    const changeSeries = (blockIndex, exerciseIndex, option) => {
+        const updatedBlocks = [...workout.blockList]
+        console.log("series "+option)
+        updatedBlocks[blockIndex].series = option
+        setWorkout(prevWorkout => ({
+            ...prevWorkout,
+            blockList: updatedBlocks
+        }))
     }
 
     const deleteBlock = (index) => {
@@ -152,16 +182,17 @@ export default function MainPage() {
         }))
     }
 
-    const cleanWorkout = () => {
+    const deleteWorkout = () => {
         // deleteWorkout(workout.date)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
+            type: null,
             blockList: [],
             modificable: true,
         }))
-
-        localStorage.removeItem(workout.date + "blocklist")
-        localStorage.removeItem(workout.date + "modificable")
+        localStorage.removeItem(actualDate + "tipo")
+        localStorage.removeItem(actualDate + "blocklist")
+        localStorage.removeItem(actualDate + "modificable")
     }
 
 
@@ -178,12 +209,36 @@ export default function MainPage() {
         }
     }
 
+    const tileClassName = ({ date, view }) => {
+        // Check if the tile represents the current date
+        const formattedDate = formatDate(date)
+
+        if (view === 'month' && formattedDate === actualDate) {
+            // Return the class name for the selected date
+            return 'selected-day';
+        }
+        else if (view === 'month' && date.getTime() === todayDate.getTime()) {
+            // Return the class name for the current date
+            return 'current-day';
+        }
+        else {
+            const localValue = localStorage.getItem(formattedDate + "blocklist")
+            const parseValue = localValue ? JSON.parse(localValue) : []
+
+            if (view === 'month' && parseValue.length > 0) {
+                return 'workout-day';
+            }
+
+        };
+        return null;
+    }
+
     return (
         <>
             <Toolbar />
             <section className='section-parent'>
                 <section className='section-routine'>
-                    <h3>Entrenamiento del Día</h3>
+                    <h2>Entrenamiento del Día: {workout.type}</h2>
                     <ul className='list'>
                         {(workout.blockList).map((block, blockIndex) => {
                             return (
@@ -194,6 +249,7 @@ export default function MainPage() {
                                         series={block.series}
                                         exerciseList={block.exerciseList}
                                         modificable={workout.modificable}
+                                        changeSeries={changeSeries}
                                         addVolume={addVolume}
                                         addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
                                         addWeight={addWeight}
@@ -202,16 +258,20 @@ export default function MainPage() {
                                 </li>
                             )
                         })}
-                        {workout.modificable && <DropDownWithSearch onChange={addBlock} options={arraySeries} text="Agregar Bloque..." />}
+                        {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}
+                        {workout.modificable && workout.type && <DropDownWithSearch onChange={addBlock} options={arraySeries} text="Agregar Bloque..." />}
                     </ul>
                 </section>
                 <section className='section-calendar'>
-                    <Calendar onClickDay={handleDateClick} />
+                    <Calendar
+                        onClickDay={handleDateClick}
+                        tileClassName={tileClassName}
+                    />
                     <div className='btn-group-vertical text-white' style={{ height: '50vh' }}>
-                        <button className='bg-customColor0 ' style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
+                        <button className='bg-customColor0' style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
                         <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={copyWorkout}>Copiar Rutina</button>
                         <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={pasteWorkout}>Pegar Rutina</button>
-                        <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={cleanWorkout}>Limpiar</button>
+                        <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={deleteWorkout}>Borrar</button>
                     </div>
                 </section>
             </section>

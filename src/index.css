@@ -123,3 +123,18 @@ button:focus-visible {
   padding: 10px;
   background-color: white;
 }
+
+.current-day {
+  background-color: #78c2ad; /* Change to your desired color */
+  color: white; /* Text color */
+}
+
+.selected-day {
+  background-color: #f3969a; /* Change to your desired color */
+  color: white; /* Text color */
+}
+
+.workout-day {
+  background: #ff7b07;
+  color: white; /* Text color */
+}

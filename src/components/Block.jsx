@@ -4,11 +4,16 @@ import DropDownWithSearch from "./DropDownWithSearch";
 import { exercises } from '../utils/exercises.json';
 import { arrayReps, arrayTime, arrayWeights } from '../utils/utils.js'
 
-export default function Block({ blockIndex, series, exerciseList, modificable, addVolume, addExercise, addWeight, deleteExercise }) {
+export default function Block({ blockIndex, series, exerciseList, modificable, changeSeries, addVolume, addExercise, addWeight, deleteExercise }) {
 
     return (
         <>
-            {series + " x { "}
+            <div className="btn-group">
+                <DropDown modificable={modificable} blockIndex={blockIndex} onClick={changeSeries} options={[1, 2, 3, 4, 5, 6]}
+                    text={series}
+                />
+                {"\u00A0 x {"}
+            </div>
             <ul className="list">
                 {exerciseList && exerciseList.map((exercise, exerciseIndex) => {
                     return (

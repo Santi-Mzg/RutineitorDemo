@@ -9,6 +9,8 @@ function DropDown({ modificable, blockIndex, exerciseIndex, onClick, options, te
   
   const onClickLocal = (blockIndex, index, elem) => {
     onClick(blockIndex, index, elem);
+    console.log("series "+elem)
+
     setExpanded(false);
   }
 
