@@ -23,6 +23,7 @@ a {
   color: #646cff;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #535bf2;
 }
@@ -56,9 +57,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
@@ -69,23 +72,25 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #747bff;
   }
+
   button {
     background-color: #f9f9f9;
   }
 }
 
-.section-parent {
+.parent-section {
   display: flex;
   flex-flow: row wrap;
   box-sizing: border-box;
 }
 
-.section-routine {
-  width: 50vh;
-  height: 100vh;
+.routine-section {
+  width: 100vh;
+  height: 50vh;
   display: flex;
   flex: 2;
   flex-flow: column nowrap;
@@ -93,23 +98,28 @@ button:focus-visible {
   align-items: center;
 }
 
-.section-calendar {
-  width: 50vh;
-  height: 100vh;
+.calendar-section {
+  width: 100vh;
+  height: 50vh;
   display: flex;
-  flex: 2 ;
-  flex-flow: column nowrap; 
+  flex: 2;
+  flex-flow: column nowrap;
   position: relative;
   justify-content: center;
   align-items: center;
 }
 
-.section-buttons {
-  height: 100vh;
-  display: flex;
-  flex: 1;
-  flex-flow: column nowrap; 
-  justify-content: space-around;
+.big-button {
+  width: 25vh;
+  aspect-ratio: 2;
+  margin: 5px;
+  background-color: #f3969a;
+  color: white;
+}
+
+.react-calendar {
+  width: 100%;
+  max-width: 100vh;
 }
 
 .boton-expandible-lista {
@@ -125,16 +135,21 @@ button:focus-visible {
 }
 
 .current-day {
-  background-color: #78c2ad; /* Change to your desired color */
-  color: white; /* Text color */
+  background-color: #78c2ad;
+  /* Change to your desired color */
+  color: white;
+  /* Text color */
 }
 
 .selected-day {
-  background-color: #f3969a; /* Change to your desired color */
-  color: white; /* Text color */
+  background-color: #f3969a;
+  /* Change to your desired color */
+  color: white;
+  /* Text color */
 }
 
 .workout-day {
   background: #ff7b07;
-  color: white; /* Text color */
+  color: white;
+  /* Text color */
 }

@@ -6,6 +6,21 @@
       "weighted": false
     },
     {
+      "label": "Aperturas Anillas",
+      "isometric": false,
+      "weighted": false
+    },
+    {
+      "label": "Aperturas Inclinadas",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Polea Cruzada",
+      "isometric": false,
+      "weighted": true
+    },
+    {
       "label": "Autralianas",
       "isometric": false,
       "weighted": true
@@ -14,6 +29,11 @@
       "label": "Back Lever",
       "isometric": true,
       "weighted": false
+    },
+    {
+      "label": "Banco Inclinado",
+      "isometric": false,
+      "weighted": true
     },
     {
       "label": "Banco Plano",
@@ -51,7 +71,7 @@
       "weighted": false
     },
     {
-      "label": "Bent Planche",
+      "label": "Bent Arm Planche",
       "isometric": true,
       "weighted": false
     },
@@ -76,12 +96,12 @@
       "weighted": false
     },
     {
-      "label": "Cristo Elevaciones Banda",
+      "label": "Cristo Aperturas Banda",
       "isometric": false,
       "weighted": false
     },
     {
-      "label": "Cristo Elevaciones Codo",
+      "label": "Cristo Aperturas Codo Sup",
       "isometric": false,
       "weighted": false
     },
@@ -92,6 +112,11 @@
     },
     {
       "label": "Dominadas 1 brazo",
+      "isometric": false,
+      "weighted": false
+    },
+    {
+      "label": "Dominadas 1 brazo Asistidas",
       "isometric": false,
       "weighted": false
     },
@@ -127,6 +152,11 @@
     },
     {
       "label": "Dragon Flag",
+      "isometric": false,
+      "weighted": false
+    },
+    {
+      "label": "Dragon Squat",
       "isometric": false,
       "weighted": false
     },
@@ -179,6 +209,11 @@
       "label": "Flexiones",
       "isometric": false,
       "weighted": true
+    },
+    {
+      "label": "Flexiones A Bent Arm",
+      "isometric": false,
+      "weighted": false
     },
     {
       "label": "Flexiones Arquero",
@@ -406,6 +441,11 @@
       "weighted": false
     },
     {
+      "label": "Remo Barra",
+      "isometric": false,
+      "weighted": true
+    },
+    {
       "label": "Remo Invertido",
       "isometric": false,
       "weighted": false
@@ -427,6 +467,11 @@
     },
     {
       "label": "Rueda Abdominal",
+      "isometric": false,
+      "weighted": false
+    },
+    {
+      "label": "Rueda Abdominal Parado",
       "isometric": false,
       "weighted": false
     },
@@ -501,6 +546,11 @@
       "weighted": true
     },
     {
+      "label": "Tríceps Polea",
+      "isometric": false,
+      "weighted": true
+    },
+    {
       "label": "Tuck Planche",
       "isometric": true,
       "weighted": false
@@ -528,6 +578,11 @@
     {
       "label": "Verticales lado a lado",
       "isometric": false,
+      "weighted": false
+    },
+    {
+      "label": "Vertical 1 Brazo Finger Sup",
+      "isometric": true,
       "weighted": false
     },
     {

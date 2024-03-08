@@ -7,6 +7,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
 import { arraySeries, arrayTypes, formatDate } from '../utils/utils.js'
+import { parse } from 'postcss';
 
 export default function MainPage() {
 
@@ -96,7 +97,7 @@ export default function MainPage() {
 
     const changeSeries = (blockIndex, exerciseIndex, option) => {
         const updatedBlocks = [...workout.blockList]
-        console.log("series "+option)
+        console.log("series " + option)
         updatedBlocks[blockIndex].series = option
         setWorkout(prevWorkout => ({
             ...prevWorkout,
@@ -222,13 +223,12 @@ export default function MainPage() {
             return 'current-day';
         }
         else {
-            const localValue = localStorage.getItem(formattedDate + "blocklist")
-            const parseValue = localValue ? JSON.parse(localValue) : []
+            const localValue = localStorage.getItem(formattedDate + "tipo")
+            const parseValue = localValue ? JSON.parse(localValue) : ""
 
-            if (view === 'month' && parseValue.length > 0) {
+            if (view === 'month' && parseValue && parseValue.length > 0) {
                 return 'workout-day';
             }
-
         };
         return null;
     }
@@ -236,9 +236,12 @@ export default function MainPage() {
     return (
         <>
             <Toolbar />
-            <section className='section-parent'>
-                <section className='section-routine'>
-                    <h2>Entrenamiento del Día: {workout.type}</h2>
+            <section className='parent-section'>
+                <section className='routine-section'>
+                    <div style={{ 'font-size': '20px' }}>
+                        <h2 >Entrenamiento del Día:</h2>
+                        <h2 style={{ color: '#f3969a', 'font-weight': 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
+                    </div>
                     <ul className='list'>
                         {(workout.blockList).map((block, blockIndex) => {
                             return (
@@ -262,16 +265,18 @@ export default function MainPage() {
                         {workout.modificable && workout.type && <DropDownWithSearch onChange={addBlock} options={arraySeries} text="Agregar Bloque..." />}
                     </ul>
                 </section>
-                <section className='section-calendar'>
-                    <Calendar
-                        onClickDay={handleDateClick}
-                        tileClassName={tileClassName}
-                    />
-                    <div className='btn-group-vertical text-white' style={{ height: '50vh' }}>
-                        <button className='bg-customColor0' style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
-                        <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={copyWorkout}>Copiar Rutina</button>
-                        <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={pasteWorkout}>Pegar Rutina</button>
-                        <button className="bg-customColor0" style={{ width: '55vh', maxHeight: '50px', margin: '10px' }} type="button" onClick={deleteWorkout}>Borrar</button>
+                <section className='calendar-section'>
+                    <div>
+                        <div className='btn-group text-white' style={{ width: '50vh' }}>
+                            <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
+                            <button className="big-button" type="button" onClick={copyWorkout}>Copiar Rutina</button>
+                            <button className="big-button" type="button" onClick={pasteWorkout}>Pegar Rutina</button>
+                            <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
+                        </div>
+                        <Calendar
+                            onClickDay={handleDateClick}
+                            tileClassName={tileClassName}
+                        />
                     </div>
                 </section>
             </section>
