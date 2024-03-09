@@ -238,9 +238,9 @@ export default function MainPage() {
             <Toolbar />
             <section className='parent-section'>
                 <section className='routine-section'>
-                    <div style={{ 'font-size': '20px' }}>
+                    <div style={{ fontSize: '20px' }}>
                         <h2 >Entrenamiento del Día:</h2>
-                        <h2 style={{ color: '#f3969a', 'font-weight': 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
+                        <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
                     </div>
                     <ul className='list'>
                         {(workout.blockList).map((block, blockIndex) => {
