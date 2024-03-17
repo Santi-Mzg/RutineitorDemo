@@ -77,27 +77,30 @@ export default function MainPage() {
     }, [workout.type])
 
     // Funciones de la rutina
+    // Funciones para manejo de bloques
     const createWorkout = (option) => {
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             type: option.value
         }));
+        addBlock(0)
     }
 
-    const addBlock = (option) => {
+    const addBlock = (blockIndex) => {
         const newBlock = {
-            series: option.value,
+            series: 3,
             exerciseList: [],
         }
+        const updatedBlocks = [...workout.blockList]
+        updatedBlocks.splice(blockIndex, 0, newBlock)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
-            blockList: [...prevWorkout.blockList, newBlock]
+            blockList: updatedBlocks
         }));
     }
 
-    const changeSeries = (blockIndex, exerciseIndex, option) => {
+    const updateSeries = (blockIndex, exerciseIndex, option) => {
         const updatedBlocks = [...workout.blockList]
-        console.log("series " + option)
         updatedBlocks[blockIndex].series = option
         setWorkout(prevWorkout => ({
             ...prevWorkout,
@@ -105,15 +108,26 @@ export default function MainPage() {
         }))
     }
 
-    const deleteBlock = (index) => {
+    const updateExerciseList = (blockIndex, newExerciseList) => {
         const updatedBlocks = [...workout.blockList]
-        updatedBlocks.splice(index, 1)
+        updatedBlocks[blockIndex].exerciseList = newExerciseList
+        setWorkout(prevWorkout => ({
+            ...prevWorkout,
+            blockList: updatedBlocks
+        }))
+    }
+
+    const deleteBlock = (blockIndex) => {
+        const updatedBlocks = [...workout.blockList]
+        updatedBlocks.splice(blockIndex, 1)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             blockList: updatedBlocks
         }));
     }
 
+
+    // Funciones para manejo de ejercicios
     const addExerciseToBlock = (blockIndex, exercise) => {
         const newExercise = {
             label: exercise.label,
@@ -124,15 +138,6 @@ export default function MainPage() {
         }
         const updatedBlocks = [...workout.blockList]
         updatedBlocks[blockIndex].exerciseList.push(newExercise)
-        setWorkout(prevWorkout => ({
-            ...prevWorkout,
-            blockList: updatedBlocks
-        }))
-    }
-
-    const deleteExerciseFromBlock = (blockIndex, exerciseIndex) => {
-        const updatedBlocks = [...workout.blockList]
-        updatedBlocks[blockIndex].exerciseList.splice(exerciseIndex, 1)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             blockList: updatedBlocks
@@ -151,6 +156,15 @@ export default function MainPage() {
     const addWeight = (blockIndex, exerciseIndex, weight) => {
         const updatedBlocks = [...workout.blockList]
         updatedBlocks[blockIndex].exerciseList[exerciseIndex].weight = weight
+        setWorkout(prevWorkout => ({
+            ...prevWorkout,
+            blockList: updatedBlocks
+        }))
+    }
+
+    const deleteExerciseFromBlock = (blockIndex, exerciseIndex) => {
+        const updatedBlocks = [...workout.blockList]
+        updatedBlocks[blockIndex].exerciseList.splice(exerciseIndex, 1)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             blockList: updatedBlocks
@@ -246,23 +260,30 @@ export default function MainPage() {
                         {(workout.blockList).map((block, blockIndex) => {
                             return (
                                 <li key={blockIndex} style={{ marginBottom: '30px' }}>
-                                    <Block
-                                        {...block}
-                                        blockIndex={blockIndex}
-                                        series={block.series}
-                                        exerciseList={block.exerciseList}
-                                        modificable={workout.modificable}
-                                        changeSeries={changeSeries}
-                                        addVolume={addVolume}
-                                        addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
-                                        addWeight={addWeight}
-                                        deleteExercise={deleteExerciseFromBlock} />
-                                    {workout.modificable && <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}>X</button>}
+                                    <div style={{ border: '2px solid black', padding: '10px', margin: '5px' }}>
+                                        <Block
+                                            {...block}
+                                            blockIndex={blockIndex}
+                                            series={block.series}
+                                            exerciseList={block.exerciseList}
+                                            updateExerciseList={updateExerciseList}
+                                            modificable={workout.modificable}
+                                            updateSeries={updateSeries}
+                                            addVolume={addVolume}
+                                            addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
+                                            addWeight={addWeight}
+                                            deleteExercise={deleteExerciseFromBlock} />
+                                    </div>
+                                    {workout.modificable && 
+                                        <div>
+                                            <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}>x</button>
+                                            <button className="btn btn-success" onClick={() => addBlock(blockIndex + 1)}>+</button>
+                                        </div>
+                                    }
                                 </li>
                             )
                         })}
-                        {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}
-                        {workout.modificable && workout.type && <DropDownWithSearch onChange={addBlock} options={arraySeries} text="Agregar Bloque..." />}
+                        {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}                        
                     </ul>
                 </section>
                 <section className='calendar-section'>
