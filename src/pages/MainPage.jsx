@@ -324,20 +324,21 @@ export default function MainPage() {
                         {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}                        
                     </ul>
                 </div>
-                <button className="panel-button" type="button" onClick={togglePanel} style={{bottom: '0'}}>{expandedPanel && "v" || "^"}</button>
                 {expandedPanel &&
                 <div className='calendar-section'>
+                    <button className="panel-button" type="button" onClick={togglePanel}>{"v"}</button>
                     <div className='btn-group text-white' style={{ width: '50vh' }}>
                         <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
-                        <button className="big-button" type="button" onClick={copyWorkout}>Copiar Rutina</button>
-                        <button className="big-button" type="button" onClick={pasteWorkout}>Pegar Rutina</button>
+                        <button className="big-button" type="button" onClick={copyWorkout}>Copiar</button>
+                        <button className="big-button" type="button" onClick={pasteWorkout}>Pegar</button>
                         <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
                     </div>
                     <Calendar
                         onClickDay={handleDateClick}
                         tileClassName={tileClassName}
                     />
-                </div> 
+                </div>  
+                || <button className="panel-button" type="button" onClick={togglePanel} style={{ position: 'fixed', bottom: '0'}}>{"^"}</button>
                 }
             </div>
         </>

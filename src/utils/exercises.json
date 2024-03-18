@@ -36,22 +36,12 @@
       "weighted": true
     },
     {
-      "label": "Banco Inclinado Mancuernas",
-      "isometric": false,
-      "weighted": true
-    },
-    {
       "label": "Banco Inclinado Smith",
       "isometric": false,
       "weighted": true
     },
     {
       "label": "Banco Plano",
-      "isometric": false,
-      "weighted": true
-    },
-    {
-      "label": "Banco Plano Mancuernas",
       "isometric": false,
       "weighted": true
     },

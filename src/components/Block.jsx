@@ -17,7 +17,7 @@ export default function Block({ blockIndex, series, exerciseList, modificable, u
             <ul className="list">
                 {exerciseList && exerciseList.map((exercise, exerciseIndex) => {
                     return (
-                        <li key={exerciseIndex} style={{ marginBottom: '5px' }}>
+                        <li key={exerciseIndex} className='btn-group' style={{ marginBottom: '5px' }}>
                                 <DropDown modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onClick={addVolume} options={exercise.isometric && arrayTime || arrayReps}
                                     text={exercise.volume === 0 && "*" ||
                                         exercise.isometric && exercise.volume !== "Max" && (exercise.volume + "s") ||
