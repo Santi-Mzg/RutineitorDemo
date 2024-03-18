@@ -205,6 +205,12 @@ export default function MainPage() {
 
     // Funciones de los botones
 
+    const [expandedPanel, setExpandPanel] = useState(false);
+
+    const togglePanel = () => {
+        setExpandPanel(!expandedPanel);
+    };
+
     const saveWorkout = () => {
         // if (modificable)
         //     createOrUpdateWorkout(workout)
@@ -281,8 +287,8 @@ export default function MainPage() {
     return (
         <>
             <Toolbar />
-            <section className='parent-section'>
-                <section className='routine-section'>
+            <div className='parent-section'>
+                <div className={expandedPanel ? 'routine-section-reduced' : 'routine-section-expanded'}>
                     <div style={{ fontSize: '20px' }}>
                         <h2 >Entrenamiento del Día:</h2>
                         <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
@@ -317,22 +323,23 @@ export default function MainPage() {
                         })}
                         {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}                        
                     </ul>
-                </section>
-                <section className='calendar-section'>
-                    <div>
-                        <div className='btn-group text-white' style={{ width: '50vh' }}>
-                            <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
-                            <button className="big-button" type="button" onClick={copyWorkout}>Copiar Rutina</button>
-                            <button className="big-button" type="button" onClick={pasteWorkout}>Pegar Rutina</button>
-                            <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
-                        </div>
-                        <Calendar
-                            onClickDay={handleDateClick}
-                            tileClassName={tileClassName}
-                        />
+                </div>
+                <button className="panel-button" type="button" onClick={togglePanel} style={{bottom: '0'}}>{expandedPanel && "v" || "^"}</button>
+                {expandedPanel &&
+                <div className='calendar-section'>
+                    <div className='btn-group text-white' style={{ width: '50vh' }}>
+                        <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
+                        <button className="big-button" type="button" onClick={copyWorkout}>Copiar Rutina</button>
+                        <button className="big-button" type="button" onClick={pasteWorkout}>Pegar Rutina</button>
+                        <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
                     </div>
-                </section>
-            </section>
+                    <Calendar
+                        onClickDay={handleDateClick}
+                        tileClassName={tileClassName}
+                    />
+                </div> 
+                }
+            </div>
         </>
     )
 }
