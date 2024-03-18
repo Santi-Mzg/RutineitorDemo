@@ -6,29 +6,6 @@ import { arrayReps, arrayTime, arrayWeights } from '../utils/utils.js'
 
 export default function Block({ blockIndex, series, exerciseList, modificable, updateSeries, addVolume, addExercise, addWeight, moveExerciseDown, moveExerciseUp, deleteExercise }) {
 
-    // const [draggedItem, setDraggedItem] = useState(null);
-    
-    // const handleDragStart = (e, index) => {
-    //     setDraggedItem(index);
-    //   };
-    
-    //   const handleDragOver = (e, index) => {
-    //     e.preventDefault();
-    //     if (draggedItem === null) return;
-    
-    //     const newExerciseList = [...exerciseList];
-    //     const draggedItemContent = newExerciseList[draggedItem];
-    //     newExerciseList.splice(draggedItem, 1);
-    //     newExerciseList.splice(index, 0, draggedItemContent);
-    
-    //     updateExerciseList(blockIndex, newExerciseList);
-    //     setDraggedItem(index);
-    //   };
-    
-    //   const handleDragEnd = () => {
-    //     setDraggedItem(null);
-    //   };
-
     return (
         <>
             <div className="btn-group" style={{ borderBottom: '2px solid black', padding: '5px', margin: '3px' }}>
