@@ -297,7 +297,7 @@ export default function MainPage() {
                         {(workout.blockList).map((block, blockIndex) => {
                             return (
                                 <li key={blockIndex} style={{ marginBottom: '30px' }}>
-                                    <div style={{ border: '2px solid black', padding: '10px', margin: '5px' }}>
+                                    <div className='btn-group' style={{padding: '10px', margin: '5px'}}>
                                         <Block
                                             {...block}
                                             blockIndex={blockIndex}
