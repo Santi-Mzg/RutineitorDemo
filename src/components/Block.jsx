@@ -4,30 +4,30 @@ import DropDownWithSearch from "./DropDownWithSearch";
 import { exercises } from '../utils/exercises.json';
 import { arrayReps, arrayTime, arrayWeights } from '../utils/utils.js'
 
-export default function Block({ blockIndex, series, exerciseList, updateExerciseList, modificable, updateSeries, addVolume, addExercise, addWeight, deleteExercise }) {
+export default function Block({ blockIndex, series, exerciseList, modificable, updateSeries, addVolume, addExercise, addWeight, moveExerciseDown, moveExerciseUp, deleteExercise }) {
 
-    const [draggedItem, setDraggedItem] = useState(null);
+    // const [draggedItem, setDraggedItem] = useState(null);
     
-    const handleDragStart = (e, index) => {
-        setDraggedItem(index);
-      };
+    // const handleDragStart = (e, index) => {
+    //     setDraggedItem(index);
+    //   };
     
-      const handleDragOver = (e, index) => {
-        e.preventDefault();
-        if (draggedItem === null) return;
+    //   const handleDragOver = (e, index) => {
+    //     e.preventDefault();
+    //     if (draggedItem === null) return;
     
-        const newExerciseList = [...exerciseList];
-        const draggedItemContent = newExerciseList[draggedItem];
-        newExerciseList.splice(draggedItem, 1);
-        newExerciseList.splice(index, 0, draggedItemContent);
+    //     const newExerciseList = [...exerciseList];
+    //     const draggedItemContent = newExerciseList[draggedItem];
+    //     newExerciseList.splice(draggedItem, 1);
+    //     newExerciseList.splice(index, 0, draggedItemContent);
     
-        updateExerciseList(blockIndex, newExerciseList);
-        setDraggedItem(index);
-      };
+    //     updateExerciseList(blockIndex, newExerciseList);
+    //     setDraggedItem(index);
+    //   };
     
-      const handleDragEnd = () => {
-        setDraggedItem(null);
-      };
+    //   const handleDragEnd = () => {
+    //     setDraggedItem(null);
+    //   };
 
     return (
         <>
@@ -41,19 +41,6 @@ export default function Block({ blockIndex, series, exerciseList, updateExercise
                 {exerciseList && exerciseList.map((exercise, exerciseIndex) => {
                     return (
                         <li key={exerciseIndex} style={{ marginBottom: '5px' }}>
-                            <div 
-                                className="btn-group"
-                                draggable
-                                onDragStart={(e) => handleDragStart(e, exerciseIndex)}
-                                onDragOver={(e) => handleDragOver(e, exerciseIndex)}
-                                onDragEnd={handleDragEnd}
-                                style={{
-                                    padding: '10px',
-                                    margin: '5px',
-                                    backgroundColor: exerciseIndex === draggedItem ? 'lightblue' : 'white',
-                                    cursor: 'move',
-                                }}
-                            >
                                 <DropDown modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onClick={addVolume} options={exercise.isometric && arrayTime || arrayReps}
                                     text={exercise.volume === 0 && "*" ||
                                         exercise.isometric && exercise.volume !== "Max" && (exercise.volume + "s") ||
@@ -73,10 +60,13 @@ export default function Block({ blockIndex, series, exerciseList, updateExercise
 
                                 {modificable && 
                                 <div>
+                                    {(exerciseIndex < exerciseList.length - 1) && 
+                                    <button className="btn btn-success" onClick={() => moveExerciseDown(blockIndex, exerciseIndex)}>v</button>}
+                                    {(exerciseIndex > 0) &&
+                                    <button className="btn btn-success" onClick={() => moveExerciseUp(blockIndex, exerciseIndex)}>^</button>}
                                     <button className="btn btn-danger" onClick={() => deleteExercise(blockIndex, exerciseIndex)}>x</button>
                                 </div>
                                 }
-                            </div>
                         </li>
                     )
                 })}

@@ -108,14 +108,14 @@ export default function MainPage() {
         }))
     }
 
-    const updateExerciseList = (blockIndex, newExerciseList) => {
-        const updatedBlocks = [...workout.blockList]
-        updatedBlocks[blockIndex].exerciseList = newExerciseList
-        setWorkout(prevWorkout => ({
-            ...prevWorkout,
-            blockList: updatedBlocks
-        }))
-    }
+    // const updateExerciseList = (blockIndex, newExerciseList) => {
+    //     const updatedBlocks = [...workout.blockList]
+    //     updatedBlocks[blockIndex].exerciseList = newExerciseList
+    //     setWorkout(prevWorkout => ({
+    //         ...prevWorkout,
+    //         blockList: updatedBlocks
+    //     }))
+    // }
 
     const deleteBlock = (blockIndex) => {
         const updatedBlocks = [...workout.blockList]
@@ -160,6 +160,37 @@ export default function MainPage() {
             ...prevWorkout,
             blockList: updatedBlocks
         }))
+    }
+
+    const moveExerciseDown = (blockIndex, exerciseIndex) => {
+        if(exerciseIndex < workout.blockList[blockIndex].exerciseList.length - 1) {
+            const updatedBlocks = [...workout.blockList]
+            const updatedExercises = [...workout.blockList[blockIndex].exerciseList]
+            const temp = updatedExercises[exerciseIndex]
+            updatedExercises[exerciseIndex] = updatedExercises[exerciseIndex + 1]
+            updatedExercises[exerciseIndex + 1] = temp
+            updatedBlocks[blockIndex].exerciseList = updatedExercises
+            setWorkout(prevWorkout => ({
+                ...prevWorkout,
+                blockList: updatedBlocks
+            }))
+        }
+        
+    }
+
+    const moveExerciseUp = (blockIndex, exerciseIndex) => {
+        if(exerciseIndex > 0) {
+            const updatedBlocks = [...workout.blockList]
+            const updatedExercises = [...workout.blockList[blockIndex].exerciseList]
+            const temp = updatedExercises[exerciseIndex]
+            updatedExercises[exerciseIndex] = updatedExercises[exerciseIndex - 1]
+            updatedExercises[exerciseIndex - 1] = temp
+            updatedBlocks[blockIndex].exerciseList = updatedExercises
+            setWorkout(prevWorkout => ({
+                ...prevWorkout,
+                blockList: updatedBlocks
+            }))
+        }   
     }
 
     const deleteExerciseFromBlock = (blockIndex, exerciseIndex) => {
@@ -266,12 +297,13 @@ export default function MainPage() {
                                             blockIndex={blockIndex}
                                             series={block.series}
                                             exerciseList={block.exerciseList}
-                                            updateExerciseList={updateExerciseList}
                                             modificable={workout.modificable}
                                             updateSeries={updateSeries}
                                             addVolume={addVolume}
                                             addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
                                             addWeight={addWeight}
+                                            moveExerciseDown={moveExerciseDown}
+                                            moveExerciseUp={moveExerciseUp}
                                             deleteExercise={deleteExerciseFromBlock} />
                                     </div>
                                     {workout.modificable && 
