@@ -266,7 +266,27 @@
       "weighted": false
     },
     {
-      "label": "Flexiones verticales",
+      "label": "Flexiones verticales BTW",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Flexiones verticales BTW Deep",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Flexiones verticales CTW",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Flexiones verticales CTW Deep",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Flexiones verticales Libres",
       "isometric": false,
       "weighted": true
     },
@@ -406,6 +426,16 @@
       "weighted": true
     },
     {
+      "label": "Peso Muerto Pausado",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Peso Muerto Rumano",
+      "isometric": false,
+      "weighted": true
+    },
+    {
       "label": "Pistols",
       "isometric": false,
       "weighted": true
@@ -467,6 +497,11 @@
     },
     {
       "label": "Press Militar",
+      "isometric": false,
+      "weighted": true
+    },
+    {
+      "label": "Press Sentado",
       "isometric": false,
       "weighted": true
     },

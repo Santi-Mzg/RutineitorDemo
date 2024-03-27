@@ -11,6 +11,9 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "bootswatch": "^5.3.3",
     "react": "^18.2.0",
     "react-calendar": "^4.8.0",

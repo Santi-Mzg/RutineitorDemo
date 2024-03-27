@@ -29,7 +29,7 @@ export default function Block({ blockIndex, series, exerciseList, modificable, u
                                     {'\u00A0' + exercise.label + '\u00A0'}
                                     {exercise.weighted &&
                                         <DropDown modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onClick={addWeight} options={exercise.weighted && arrayWeights}
-                                            text={exercise.weight === null && "Lastre" ||
+                                            text={exercise.weight === null && "Peso" ||
                                                 exercise.weight === "Libre" && exercise.weight ||
                                                 exercise.weight === "Banda" && ("con " + exercise.weight) ||
                                                 ("con " + exercise.weight + " kg")}

@@ -6,14 +6,12 @@ import { useParams } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
-import { arraySeries, arrayTypes, formatDate } from '../utils/utils.js'
-import { parse } from 'postcss';
+import { arrayTypes, formatDate } from '../utils/utils.js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faComment } from '@fortawesome/free-solid-svg-icons';
+
 
 export default function MainPage() {
-
-    // const { user } = useAuth()
-    // const { workout, setWorkout, getWorkout, createOrUpdateWorkout, deleteWorkout } = useWorkout()
-
     // Constantes
     const { date } = useParams() // Obtiene la fecha pasada en la URL de la página
 
@@ -202,13 +200,38 @@ export default function MainPage() {
         }))
     }
 
+    // Código de la seccion de comentarios
 
-    // Funciones de los botones
+    const localText = localStorage.getItem(actualDate + "comments")
+    const [commentText, setCommentText] = useState( localText ? JSON.parse(localText) : '' );
 
-    const [expandedPanel, setExpandPanel] = useState(false);
+    useEffect(() => {
+        // La función del estado se ejecutará cada vez que cambie la fecha cargando los estados correpondientes
+        const localText = localStorage.getItem(actualDate + "comments")
 
-    const togglePanel = () => {
-        setExpandPanel(!expandedPanel);
+        setCommentText( localText ? JSON.parse(localText) : '' )
+    }, [workout.date])
+    
+    useEffect(() => { // Guarda el texto cuando se modifica
+        localStorage.setItem(actualDate + "comments", JSON.stringify(commentText))
+    }, [commentText])
+
+
+    const handleChange = (event) => {
+      setCommentText(event.target.value);
+    };
+
+    const [expandedCommentPanel, setExpandedCommentPanel] = useState(false);
+
+    const toggleCommentPanel = () => {
+        setExpandedCommentPanel(!expandedCommentPanel);
+    };
+
+    // Código de la seccion del calendario
+    const [expandedCalendarPanel, setExpandedCalendarPanel] = useState(false);
+
+    const toggleCalendarPanel = () => {
+        setExpandedCalendarPanel(!expandedCalendarPanel);
     };
 
     const saveWorkout = () => {
@@ -222,14 +245,17 @@ export default function MainPage() {
     }
 
     const copyWorkout = () => {
-        localStorage.setItem("clipboard", JSON.stringify(workout.blockList))
+        localStorage.setItem("clipboard-type", JSON.stringify(workout.type))
+        localStorage.setItem("clipboard-blockList", JSON.stringify(workout.blockList))
     }
 
     const pasteWorkout = () => {
         const prevBlockList = [...workout.blockList]
-        const localValue = localStorage.getItem("clipboard")
+        const localType = localStorage.getItem("clipboard-type")
+        const localValue = localStorage.getItem("clipboard-blockList")
         setWorkout(prevWorkout => ({
             ...prevWorkout,
+            type: localType ? JSON.parse(localType) : null,
             blockList: localValue ? JSON.parse(localValue) : prevBlockList
         }))
     }
@@ -242,9 +268,11 @@ export default function MainPage() {
             blockList: [],
             modificable: true,
         }))
+        setCommentText('')
         localStorage.removeItem(actualDate + "tipo")
         localStorage.removeItem(actualDate + "blocklist")
         localStorage.removeItem(actualDate + "modificable")
+        localStorage.removeItem(actualDate + "comments")
     }
 
 
@@ -288,57 +316,73 @@ export default function MainPage() {
         <>
             <Toolbar />
             <div className='parent-section'>
-                <div className={expandedPanel ? 'routine-section-reduced' : 'routine-section-expanded'}>
+                <div className='header'>
                     <div style={{ fontSize: '20px' }}>
-                        <h2 >Entrenamiento del Día:</h2>
+                        <h2>Entrenamiento del Día:</h2>
                         <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
+                        <button className='moreInfoButton' onClick={toggleCommentPanel}><FontAwesomeIcon icon={faComment} style={{fontSize: '30px', color: 'khaki'}} /></button>
                     </div>
-                    <ul className='list'>
-                        {(workout.blockList).map((block, blockIndex) => {
-                            return (
-                                <li key={blockIndex} style={{ marginBottom: '30px' }}>
-                                    <div className='btn-group' style={{padding: '10px', margin: '5px'}}>
-                                        <Block
-                                            {...block}
-                                            blockIndex={blockIndex}
-                                            series={block.series}
-                                            exerciseList={block.exerciseList}
-                                            modificable={workout.modificable}
-                                            updateSeries={updateSeries}
-                                            addVolume={addVolume}
-                                            addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
-                                            addWeight={addWeight}
-                                            moveExerciseDown={moveExerciseDown}
-                                            moveExerciseUp={moveExerciseUp}
-                                            deleteExercise={deleteExerciseFromBlock} />
-                                    </div>
-                                    {workout.modificable && 
-                                        <div>
-                                            <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}>x</button>
-                                            <button className="btn btn-success" onClick={() => addBlock(blockIndex + 1)}>+</button>
-                                        </div>
-                                    }
-                                </li>
-                            )
-                        })}
-                        {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}                        
-                    </ul>
                 </div>
-                {expandedPanel &&
-                <div className='calendar-section'>
-                    <button className="panel-button" type="button" onClick={togglePanel}>{"v"}</button>
-                    <div className='btn-group text-white' style={{ width: '50vh' }}>
-                        <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
-                        <button className="big-button" type="button" onClick={copyWorkout}>Copiar</button>
-                        <button className="big-button" type="button" onClick={pasteWorkout}>Pegar</button>
-                        <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
-                    </div>
-                    <Calendar
-                        onClickDay={handleDateClick}
-                        tileClassName={tileClassName}
+                {expandedCommentPanel && 
+                <div>
+                    <textarea
+                        className='comment-panel'
+                        value={commentText}
+                        onChange={handleChange}
+                        placeholder="Comentarios sobre la rutina..."
                     />
-                </div>  
-                || <button className="panel-button" type="button" onClick={togglePanel} style={{ position: 'fixed', bottom: '0'}}>{"^"}</button>
+                </div>
+                ||
+                <>
+                    <div className={expandedCalendarPanel ? 'routine-section-reduced' : 'routine-section-expanded'}>
+                        <ul className='list'>
+                            {(workout.blockList).map((block, blockIndex) => {
+                                return (
+                                    <li key={blockIndex} style={{ marginBottom: '30px' }}>
+                                        <div className='btn-group' style={{padding: '10px', margin: '5px'}}>
+                                            <Block
+                                                {...block}
+                                                blockIndex={blockIndex}
+                                                series={block.series}
+                                                exerciseList={block.exerciseList}
+                                                modificable={workout.modificable}
+                                                updateSeries={updateSeries}
+                                                addVolume={addVolume}
+                                                addExercise={(exercise) => addExerciseToBlock(blockIndex, exercise)}
+                                                addWeight={addWeight}
+                                                moveExerciseDown={moveExerciseDown}
+                                                moveExerciseUp={moveExerciseUp}
+                                                deleteExercise={deleteExerciseFromBlock} />
+                                        </div>
+                                        {workout.modificable && 
+                                            <div>
+                                                <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}>x</button>
+                                                <button className="btn btn-success" onClick={() => addBlock(blockIndex + 1)}>+</button>
+                                            </div>
+                                        }
+                                    </li>
+                                )
+                            })}
+                            {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} commentText="Crear..." />}                        
+                        </ul>
+                    </div>
+                    {expandedCalendarPanel &&
+                    <div className='calendar-panel'>
+                        <button className="panel-button" type="button" onClick={toggleCalendarPanel}>{"v"}</button>
+                        <div className='btn-group commentText-white' style={{ width: '50vh' }}>
+                            <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
+                            <button className="big-button" type="button" onClick={copyWorkout}>Copiar</button>
+                            <button className="big-button" type="button" onClick={pasteWorkout}>Pegar</button>
+                            <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
+                        </div>
+                        <Calendar
+                            onClickDay={handleDateClick}
+                            tileClassName={tileClassName}
+                        />
+                    </div>  
+                    || <button className="panel-button" type="button" onClick={toggleCalendarPanel} style={{ position: 'fixed', bottom: '0'}}>{"^"}</button>
+                    }
+                </>
                 }
             </div>
         </>
