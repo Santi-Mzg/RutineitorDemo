@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import DropDown from "./DropDown";
 import DropDownWithSearch from "./DropDownWithSearch";
+import TextArea from './TextArea.jsx';
 import { exercises } from '../utils/exercises.json';
-import { arrayReps, arrayTime, arrayWeights } from '../utils/utils.js'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowDown, faArrowUp, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function Block({ blockIndex, series, exerciseList, modificable, updateSeries, addVolume, addExercise, addWeight, moveExerciseDown, moveExerciseUp, deleteExercise }) {
 
@@ -19,34 +21,33 @@ export default function Block({ blockIndex, series, exerciseList, modificable, u
                     {exerciseList && exerciseList.map((exercise, exerciseIndex) => {
                         return (
                             <li key={exerciseIndex} style={{ marginBottom: '5px' }}>
-                                <div className='btn-group'>
-                                    <DropDown modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onClick={addVolume} options={exercise.isometric && arrayTime || arrayReps}
-                                        text={exercise.volume === 0 && "*" ||
-                                            exercise.isometric && exercise.volume !== "Max" && (exercise.volume + "s") ||
-                                            (exercise.volume)}
+                                <div className='btn-group' style={{display: 'flex', flexWrap: 'wrap', marginBottom: '5px'}}>
+                                    <TextArea style={{ height: '25px', width: '50px', backgroundColor: 'white', textAlign: 'center', overflowWrap: 'normal'}} modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onChange={addVolume} placeholder={"*"} options={exercise.isometric && ["Max"] || ["Max", "RIR-1", "RIR-2"]}
+                                        value={exercise.volume}
                                     />
 
-                                    {'\u00A0' + exercise.label + '\u00A0'}
+                                    {(exercise.isometric && exercise.volume !== "" && exercise.volume !== "Max" && "s " || '\u00A0') + exercise.label + '\u00A0'}
+                                    
+                                    {exercise.weighted && (exercise.weight !== "" && exercise.weight !== "Libre" && "con" + '\u00A0' )}
                                     {exercise.weighted &&
-                                        <DropDown modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onClick={addWeight} options={exercise.weighted && arrayWeights}
-                                            text={exercise.weight === null && "Peso" ||
-                                                exercise.weight === "Libre" && exercise.weight ||
-                                                exercise.weight === "Banda" && ("con " + exercise.weight) ||
-                                                ("con " + exercise.weight + " kg")}
-                                        />}
+                                    <TextArea style={{ height: '25px', width: '90px', backgroundColor: 'white', textAlign: 'left'}} modificable={modificable} blockIndex={blockIndex} exerciseIndex={exerciseIndex} onChange={addWeight} placeholder={"Peso"} options={exercise.weighted && ["Libre", "Banda Sup", "Banda Res"]}
+                                    value={exercise.weight}
+                                    />}
+                                    {exercise.weighted && (exercise.weight !== "" && exercise.weight !== "Libre" && exercise.weight !== "Banda Sup" && exercise.weight !== "Banda Res" && "kg" )}
 
                                     {'\u00A0 \u00A0'}
 
-                                    {modificable && 
+                                    
+                                </div>
+                                {modificable && 
                                     <div>
                                         {(exerciseIndex < exerciseList.length - 1) && 
-                                        <button className="btn btn-success" onClick={() => moveExerciseDown(blockIndex, exerciseIndex)}>v</button>}
+                                        <button className="btn btn-success" onClick={() => moveExerciseDown(blockIndex, exerciseIndex)}><FontAwesomeIcon icon={faArrowDown} style={{fontSize: '15px'}} /></button>}
                                         {(exerciseIndex > 0) &&
-                                        <button className="btn btn-success" onClick={() => moveExerciseUp(blockIndex, exerciseIndex)}>^</button>}
-                                        <button className="btn btn-danger" onClick={() => deleteExercise(blockIndex, exerciseIndex)}>x</button>
+                                        <button className="btn btn-success" onClick={() => moveExerciseUp(blockIndex, exerciseIndex)}><FontAwesomeIcon icon={faArrowUp} style={{fontSize: '15px'}} /></button>}
+                                        <button className="btn btn-danger" onClick={() => deleteExercise(blockIndex, exerciseIndex)}><FontAwesomeIcon icon={faTrash} style={{fontSize: '15px'}} /></button>
                                     </div>
-                                    }
-                                </div>
+                                }
                             </li>
                         )
                     })}

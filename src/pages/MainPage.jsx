@@ -8,7 +8,7 @@ import 'react-calendar/dist/Calendar.css';
 import { useNavigate } from 'react-router-dom';
 import { arrayTypes, formatDate } from '../utils/utils.js'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-solid-svg-icons';
+import { faComment, faPlus, faTrashAlt, faSave, faEdit, faCopy, faClipboard } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function MainPage() {
@@ -131,8 +131,8 @@ export default function MainPage() {
             label: exercise.label,
             isometric: exercise.isometric,
             weighted: exercise.weighted,
-            volume: 0,
-            weight: null,
+            volume: "",
+            weight: "",
         }
         const updatedBlocks = [...workout.blockList]
         updatedBlocks[blockIndex].exerciseList.push(newExercise)
@@ -145,6 +145,7 @@ export default function MainPage() {
     const addVolume = (blockIndex, exerciseIndex, volume) => {
         const updatedBlocks = [...workout.blockList]
         updatedBlocks[blockIndex].exerciseList[exerciseIndex].volume = volume
+        console.log("volume "+volume)
         setWorkout(prevWorkout => ({
             ...prevWorkout,
             blockList: updatedBlocks
@@ -317,11 +318,9 @@ export default function MainPage() {
             <Toolbar />
             <div className='parent-section'>
                 <div className='header'>
-                    <div style={{ fontSize: '20px' }}>
-                        <h2>Entrenamiento del Día:</h2>
-                        <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center', marginBottom: '20px' }}>{workout.type}</h2>
-                        <button className='moreInfoButton' onClick={toggleCommentPanel}><FontAwesomeIcon icon={faComment} style={{fontSize: '30px', color: 'khaki'}} /></button>
-                    </div>
+                    <h2>Entrenamiento del Día:</h2>
+                    <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center' }}>{workout.type}</h2>
+                    <button className='moreInfoButton' onClick={toggleCommentPanel}><FontAwesomeIcon icon={faComment} style={{fontSize: '30px', color: 'khaki'}} /></button>
                 </div>
                 {expandedCommentPanel && 
                 <div>
@@ -356,8 +355,8 @@ export default function MainPage() {
                                         </div>
                                         {workout.modificable && 
                                             <div>
-                                                <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}>x</button>
-                                                <button className="btn btn-success" onClick={() => addBlock(blockIndex + 1)}>+</button>
+                                                <button className="btn btn-danger" onClick={() => deleteBlock(blockIndex)}><FontAwesomeIcon icon={faTrashAlt} style={{fontSize: '15px'}} /></button>
+                                                <button className="btn btn-success" onClick={() => addBlock(blockIndex + 1)}><FontAwesomeIcon icon={faPlus} style={{fontSize: '15px'}} /></button>
                                             </div>
                                         }
                                     </li>
@@ -368,19 +367,20 @@ export default function MainPage() {
                     </div>
                     {expandedCalendarPanel &&
                     <div className='calendar-panel'>
-                        <button className="panel-button" type="button" onClick={toggleCalendarPanel}>{"v"}</button>
-                        <div className='btn-group commentText-white' style={{ width: '50vh' }}>
-                            <button className="big-button" type="button" onClick={saveWorkout}>{(workout.modificable && "Guardar" || "Modificar")}</button>
-                            <button className="big-button" type="button" onClick={copyWorkout}>Copiar</button>
-                            <button className="big-button" type="button" onClick={pasteWorkout}>Pegar</button>
-                            <button className="big-button" type="button" onClick={deleteWorkout}>Borrar</button>
+                        <button className="panel-button" type="button" onClick={toggleCalendarPanel} style={{position: 'absolute', top: '0'}}>{"v"}</button>
+                        <div className='btn-group text-white' style={{ width: '50vh', marginTop: '20px'}}>
+                            <button className="big-button" type="button" onClick={saveWorkout}><FontAwesomeIcon icon={(workout.modificable && faSave || faEdit)} style={{fontSize: '30px'}} /></button>
+                            <button className="big-button" type="button" onClick={copyWorkout}><FontAwesomeIcon icon={faCopy} style={{fontSize: '30px'}} /></button>
+                            <button className="big-button" type="button" onClick={pasteWorkout}><FontAwesomeIcon icon={faClipboard} style={{fontSize: '30px'}} /></button>
+                            <button className="big-button" type="button" onClick={deleteWorkout}><FontAwesomeIcon icon={faTrashAlt} style={{fontSize: '30px'}} /></button>
                         </div>
                         <Calendar
                             onClickDay={handleDateClick}
                             tileClassName={tileClassName}
                         />
                     </div>  
-                    || <button className="panel-button" type="button" onClick={toggleCalendarPanel} style={{ position: 'fixed', bottom: '0'}}>{"^"}</button>
+                    || 
+                    <button className="panel-button" type="button" onClick={toggleCalendarPanel} style={{ position: 'fixed', bottom: '0'}}>{"^"}</button>
                     }
                 </>
                 }
