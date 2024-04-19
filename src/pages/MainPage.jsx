@@ -290,7 +290,14 @@ export default function MainPage() {
         }
     }
 
+    // const [filteredType, setFilteredType] = useState('') 
+
+    // const selectFilteredType = ({ type }) => {
+    //     setFilteredType(type)
+    // }
+
     const tileClassName = ({ date, view }) => {
+
         // Check if the tile represents the current date
         const formattedDate = formatDate(date)
 
@@ -320,7 +327,7 @@ export default function MainPage() {
                 <div className='header'>
                     <h2>Entrenamiento del Día:</h2>
                     <h2 style={{ color: '#f3969a', fontWeight: 'bold', textAlign: 'center' }}>{workout.type}</h2>
-                    <button className='moreInfoButton' onClick={toggleCommentPanel}><FontAwesomeIcon icon={faComment} style={{fontSize: '30px', color: 'khaki'}} /></button>
+                    <button className='more-info-button' onClick={toggleCommentPanel}><FontAwesomeIcon icon={faComment} style={{fontSize: '30px', color: 'khaki'}} /></button>
                 </div>
                 {expandedCommentPanel && 
                 <div>
@@ -362,13 +369,13 @@ export default function MainPage() {
                                     </li>
                                 )
                             })}
-                            {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} commentText="Crear..." />}                        
+                            {workout.modificable && !workout.type && <DropDownWithSearch onChange={createWorkout} options={arrayTypes} text="Crear..." />}                        
                         </ul>
                     </div>
                     {expandedCalendarPanel &&
                     <div className='calendar-panel'>
-                        <button className="panel-button" type="button" onClick={toggleCalendarPanel} style={{position: 'absolute', top: '0'}}>{"v"}</button>
-                        <div className='btn-group text-white' style={{ width: '50vh', marginTop: '20px'}}>
+                        <button className="panel-button" type="button" onClick={toggleCalendarPanel} >{"v"}</button>
+                        <div className='btn-group text-white' style={{ width: '50vh'}}>
                             <button className="big-button" type="button" onClick={saveWorkout}><FontAwesomeIcon icon={(workout.modificable && faSave || faEdit)} style={{fontSize: '30px'}} /></button>
                             <button className="big-button" type="button" onClick={copyWorkout}><FontAwesomeIcon icon={faCopy} style={{fontSize: '30px'}} /></button>
                             <button className="big-button" type="button" onClick={pasteWorkout}><FontAwesomeIcon icon={faClipboard} style={{fontSize: '30px'}} /></button>

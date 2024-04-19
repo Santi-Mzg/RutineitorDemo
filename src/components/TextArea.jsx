@@ -6,11 +6,11 @@ export default function TextArea({ style, value, onChange, placeholder, modifica
 
     const toggleExpanded = () => {
         setExpanded(!expanded);
-      };
+    };
 
     const handleChange = (event) => {
         const inputValue = event.target.value;
-        const filteredValue = inputValue.replace(/\D/g, ''); // Filtra solo números
+        const filteredValue = inputValue.replace(/[^0-9.]|(?<!\d)\.|(?<=\..*)\.|(?<=\.[0-9]*)[0-9]{3,}/g, ''); // Filtra solo números
         onChangeLocal(blockIndex, exerciseIndex, filteredValue);   
     }
     
@@ -20,7 +20,7 @@ export default function TextArea({ style, value, onChange, placeholder, modifica
     }
 
     return (
-        <>
+        <div className='btn-group-vertical'>
             <textarea 
                 style={style} 
                 disabled={!modificable}
@@ -40,6 +40,6 @@ export default function TextArea({ style, value, onChange, placeholder, modifica
                 })}
                 </ul>
             )}
-        </>
+        </div>
     )
 }

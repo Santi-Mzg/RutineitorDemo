@@ -666,6 +666,11 @@
       "weighted": false
     },
     {
+      "label": "Vertical a 7",
+      "isometric": false,
+      "weighted": false
+    },
+    {
       "label": "Verticales lado a lado",
       "isometric": false,
       "weighted": false
